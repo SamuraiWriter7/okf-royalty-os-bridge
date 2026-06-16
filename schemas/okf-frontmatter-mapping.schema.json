@@ -1,0 +1,209 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://github.com/SamuraiWriter7/okf-royalty-os-bridge/schemas/okf-frontmatter-mapping.schema.json",
+"title": "OKF Frontmatter Mapping",
+"description": "A mapping record describing how OKF frontmatter fields are interpreted by the OKF Royalty OS Bridge.",
+"type": "object",
+"additionalProperties": false,
+"required": ["okf_frontmatter_mapping"],
+"properties": {
+"okf_frontmatter_mapping": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"id",
+"created_at",
+"okf_fields",
+"bridge_targets",
+"mapping_rules",
+"compatibility"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "0.2.0"
+},
+"id": {
+"type": "string",
+"minLength": 1
+},
+"created_at": {
+"type": "string",
+"format": "date-time"
+},
+"okf_fields": {
+"type": "object",
+"additionalProperties": false,
+"required": ["type"],
+"properties": {
+"type": {
+"type": "string",
+"minLength": 1
+},
+"title": {
+"type": "string"
+},
+"description": {
+"type": "string"
+},
+"resource": {
+"type": "string"
+},
+"tags": {
+"type": "array",
+"items": {
+"type": "string"
+}
+},
+"timestamp": {
+"type": "string",
+"format": "date-time"
+}
+}
+},
+"bridge_targets": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"okf_document",
+"origin",
+"evidence",
+"allocation",
+"lifecycle"
+],
+"properties": {
+"okf_document": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "string",
+"enum": [
+"okf_document.okf_type",
+"okf_document.title",
+"okf_document.description",
+"okf_document.resource",
+"okf_document.tags",
+"okf_document.timestamp"
+]
+}
+},
+"origin": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"origin.origin_uri"
+]
+}
+},
+"evidence": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"evidence.ref",
+"evidence.description"
+]
+}
+},
+"allocation": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"allocation.policy_tags",
+"allocation.allocation_basis"
+]
+}
+},
+"lifecycle": {
+"type": "array",
+"items": {
+"type": "string",
+"enum": [
+"lifecycle.review_note"
+]
+}
+}
+}
+},
+"mapping_rules": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": ["source_field", "target_fields", "mapping_role"],
+"properties": {
+"source_field": {
+"type": "string",
+"enum": [
+"type",
+"title",
+"description",
+"resource",
+"tags",
+"timestamp"
+]
+},
+"target_fields": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "string"
+}
+},
+"mapping_role": {
+"type": "string",
+"minLength": 1
+},
+"is_required_for_okf": {
+"type": "boolean"
+},
+"is_required_for_bridge": {
+"type": "boolean"
+},
+"notes": {
+"type": "string"
+}
+}
+}
+},
+"compatibility": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"modifies_okf",
+"requires_custom_okf_fields",
+"external_bridge_record",
+"human_readable",
+"agent_readable"
+],
+"properties": {
+"modifies_okf": {
+"type": "boolean",
+"const": false
+},
+"requires_custom_okf_fields": {
+"type": "boolean",
+"const": false
+},
+"external_bridge_record": {
+"type": "boolean",
+"const": true
+},
+"human_readable": {
+"type": "boolean",
+"const": true
+},
+"agent_readable": {
+"type": "boolean",
+"const": true
+}
+}
+}
+}
+}
+}
+}
