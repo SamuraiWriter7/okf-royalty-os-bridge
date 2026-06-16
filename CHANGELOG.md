@@ -4,6 +4,114 @@ All notable changes to this project will be documented in this file.
 
 This repository follows a candidate-based development style. Early versions may evolve quickly as schemas, examples, validation scripts, and governance documents are refined.
 
+## [v0.4.0-candidate] - 2026-06-16
+
+### Added
+
+* Added v0.4 policy layer: **Compute Access Policy Integration**.
+* Added documentation:
+
+  * `docs/compute-access-policy-integration.md`
+* Added schema:
+
+  * `schemas/compute-access-policy-integration.schema.json`
+* Added example:
+
+  * `examples/compute-access-policy-integration.example.yaml`
+
+### Defined
+
+* Defined `compute_access_policy_integration` as the v0.4 policy integration record.
+* Defined how OKF-compatible knowledge documents, bridge records, and trace links can be connected to compute access policies.
+* Defined how AI/agent usage actions can be governed through explicit policy decisions.
+
+### Governed Actions
+
+* Added support for the following governed AI/agent actions:
+
+  * `read`
+  * `index`
+  * `embed`
+  * `retrieve`
+  * `reason`
+  * `generate`
+  * `train`
+  * `fine_tune`
+  * `redistribute`
+
+### Policy Decisions
+
+* Added support for the following policy decisions:
+
+  * `permit`
+  * `deny`
+  * `review_required`
+
+### Enforcement Modes
+
+* Added support for the following enforcement modes:
+
+  * `advisory`
+  * `audit_only`
+  * `review_gate`
+  * `blocking`
+
+### Policy Model
+
+* Introduced `policy_ref` for linking a knowledge package to a compute access policy.
+* Introduced `linked_assets` for connecting:
+
+  * OKF document
+  * bridge record
+  * trace links
+* Introduced `policy_scope` for defining which assets and actions the policy applies to.
+* Introduced `access_rules` for action-level permission decisions.
+* Introduced `enforcement` for usage checking, logging, and denial behavior.
+* Introduced `review` for human or governance review status.
+
+### Default Safety Boundary
+
+* Added support for:
+
+```text
+deny_if_no_policy: true
+```
+
+* Clarified that readable or traceable knowledge should not automatically imply permission for training, fine-tuning, redistribution, or commercial reuse.
+* Clarified that compute access is policy-bound, not merely trace-bound.
+
+### Validation
+
+* Updated `scripts/validate_examples.py` to validate:
+
+  * `OKF Royalty Bridge`
+  * `OKF Frontmatter Mapping`
+  * `Trace Layer Auto-Link`
+  * `Compute Access Policy Integration`
+* Confirmed GitHub Actions validation passes with the new v0.4 example.
+
+### Fixed
+
+* Corrected `trace_links` nesting under `linked_assets`.
+* Preserved strict schema enforcement using `additionalProperties: false`.
+* Confirmed that schema validation catches misplaced policy fields and structural drift.
+
+### Status
+
+* v0.4 Compute Access Policy Integration is active.
+* The repository now supports:
+
+  * v0.1 Bridge Record
+  * v0.2 OKF Compatibility Mapping
+  * v0.3 Trace Layer Auto-Link
+  * v0.4 Compute Access Policy Integration
+
+### Next Expected Direction
+
+* v0.5: Agent Consumption Event
+
+---
+
 ## [v0.3.0-candidate] - 2026-06-16
 
 ### Added
@@ -215,7 +323,7 @@ This repository follows a candidate-based development style. Early versions may 
 ### Bridge Model
 
 * Introduced `okf_document` as the reference to an OKF-compatible knowledge file.
-* Introduced `origin` as the震源 / origin record of the knowledge package.
+* Introduced `origin` as the 震源 / origin record of the knowledge package.
 * Introduced `evidence` as the proof layer for attribution and review.
 * Introduced `attribution` as the contributor and contribution-weight model.
 * Introduced `compute_access_right` as the AI/agent usage permission boundary.
