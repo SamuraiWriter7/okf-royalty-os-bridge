@@ -44,7 +44,6 @@ is_required_for_okf: true
 is_required_for_bridge: true
 notes: "The bridge records the OKF type but does not redefine OKF type semantics."
 
-```
 - source_field: "title"
   target_fields:
     - "okf_document.title"
@@ -88,7 +87,6 @@ notes: "The bridge records the OKF type but does not redefine OKF type semantics
   is_required_for_okf: false
   is_required_for_bridge: false
   notes: "Timestamp should not be treated as a complete lifecycle record without review."
-```
 
 compatibility:
 modifies_okf: false
