@@ -4,6 +4,154 @@ All notable changes to this project will be documented in this file.
 
 This repository follows a candidate-based development style. Early versions may evolve quickly as schemas, examples, validation scripts, and governance documents are refined.
 
+## [v0.5.0-candidate] - 2026-06-16
+
+### Added
+
+* Added v0.5 usage layer: **Agent Consumption Event**.
+* Added documentation:
+
+  * `docs/agent-consumption-event.md`
+* Added schema:
+
+  * `schemas/agent-consumption-event.schema.json`
+* Added example:
+
+  * `examples/agent-consumption-event.example.yaml`
+
+### Defined
+
+* Defined `agent_consumption_event` as the v0.5 usage event record.
+* Defined how AI agents consume OKF-linked knowledge packages under Royalty OS governance.
+* Defined how usage events connect to:
+
+  * agents
+  * OKF documents
+  * bridge records
+  * compute access policy integration records
+  * trace links
+  * decision snapshots
+  * generated usage traces
+  * output context
+  * usage logging
+  * human review
+
+### Agent Model
+
+* Introduced `agent` for identifying the consuming AI or workflow actor.
+* Added support for agent types:
+
+  * `llm_agent`
+  * `retrieval_agent`
+  * `workflow_agent`
+  * `indexer`
+  * `human_assisted_agent`
+  * `other`
+
+### Consumed Asset Model
+
+* Introduced `consumed_asset` for connecting an event to:
+
+  * `okf_document`
+  * `bridge_record`
+  * `policy_integration`
+  * `trace_links`
+
+### Policy Context
+
+* Introduced `policy_context` for recording the policy state at the time of consumption.
+* Added support for:
+
+  * `policy_id`
+  * `enforcement_mode`
+  * `deny_if_no_policy`
+  * `decision_snapshot`
+
+### Consumption Actions
+
+* Added support for the following consumption actions:
+
+  * `read`
+  * `index`
+  * `embed`
+  * `retrieve`
+  * `reason`
+  * `generate`
+  * `train`
+  * `fine_tune`
+  * `redistribute`
+
+### Trace Context
+
+* Introduced `trace_context` for connecting agent usage to trace records.
+* Added support for:
+
+  * `source_trace_ids`
+  * `generated_usage_trace_id`
+  * `attribution_required`
+  * `allocation_triggered`
+
+### Output Context
+
+* Introduced `output_context` for recording whether consumption generated an output.
+* Added support for:
+
+  * `output_generated`
+  * `output_ref`
+  * `output_hash`
+  * `attribution_note_required`
+
+### Usage Logging
+
+* Introduced `usage_logging` for recording usage log requirements and status.
+* Added support for log statuses:
+
+  * `pending`
+  * `recorded`
+  * `skipped`
+  * `failed`
+
+### Review Model
+
+* Added review boundary for agent consumption events.
+* Clarified that review-gated actions should not trigger allocation until approved.
+* Clarified that generation, training, fine-tuning, redistribution, and cross-agent propagation may require stronger review.
+
+### Validation
+
+* Updated `scripts/validate_examples.py` to validate:
+
+  * `OKF Royalty Bridge`
+  * `OKF Frontmatter Mapping`
+  * `Trace Layer Auto-Link`
+  * `Compute Access Policy Integration`
+  * `Agent Consumption Event`
+* Confirmed GitHub Actions validation passes with the new v0.5 example.
+
+### Fixed
+
+* Removed stray Markdown code fences from the YAML example.
+* Corrected `trace_links` nesting under `consumed_asset`.
+* Preserved strict schema enforcement using `additionalProperties: false`.
+* Confirmed that schema validation catches misplaced usage-context fields and structural drift.
+
+### Status
+
+* v0.5 Agent Consumption Event is active.
+* The repository now supports:
+
+  * v0.1 Bridge Record
+  * v0.2 OKF Compatibility Mapping
+  * v0.3 Trace Layer Auto-Link
+  * v0.4 Compute Access Policy Integration
+  * v0.5 Agent Consumption Event
+
+### Next Expected Direction
+
+* v0.6: Allocation Trigger Event
+
+---
+
 ## [v0.4.0-candidate] - 2026-06-16
 
 ### Added
@@ -358,3 +506,4 @@ python -m py_compile scripts/validate_examples.py
 * Initial candidate version.
 * Validated by local script and GitHub Actions.
 * Foundation for v0.2 OKF Compatibility Mapping.
+
