@@ -1,0 +1,305 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://github.com/SamuraiWriter7/okf-royalty-os-bridge/schemas/compute-access-policy-integration.schema.json",
+"title": "Compute Access Policy Integration",
+"description": "A record connecting OKF Royalty OS Bridge records and trace links to compute access policies for AI and agent usage.",
+"type": "object",
+"additionalProperties": false,
+"required": ["compute_access_policy_integration"],
+"properties": {
+"compute_access_policy_integration": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"id",
+"created_at",
+"policy_ref",
+"linked_assets",
+"policy_scope",
+"access_rules",
+"enforcement",
+"review"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "0.4.0"
+},
+"id": {
+"type": "string",
+"minLength": 1
+},
+"created_at": {
+"type": "string",
+"format": "date-time"
+},
+"policy_ref": {
+"type": "object",
+"additionalProperties": false,
+"required": ["policy_id", "policy_name", "policy_version"],
+"properties": {
+"policy_id": {
+"type": "string",
+"minLength": 1
+},
+"policy_name": {
+"type": "string",
+"minLength": 1
+},
+"policy_version": {
+"type": "string",
+"minLength": 1
+},
+"policy_uri": {
+"type": "string"
+}
+}
+},
+"linked_assets": {
+"type": "object",
+"additionalProperties": false,
+"required": ["okf_document", "bridge_record", "trace_links"],
+"properties": {
+"okf_document": {
+"type": "object",
+"additionalProperties": false,
+"required": ["path", "okf_type", "title"],
+"properties": {
+"path": {
+"type": "string",
+"minLength": 1
+},
+"okf_type": {
+"type": "string",
+"minLength": 1
+},
+"title": {
+"type": "string",
+"minLength": 1
+},
+"content_hash": {
+"type": "string"
+}
+}
+},
+"bridge_record": {
+"type": "object",
+"additionalProperties": false,
+"required": ["bridge_id", "ref", "schema_version"],
+"properties": {
+"bridge_id": {
+"type": "string",
+"minLength": 1
+},
+"ref": {
+"type": "string",
+"minLength": 1
+},
+"schema_version": {
+"type": "string",
+"minLength": 1
+}
+}
+},
+"trace_links": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": ["link_id", "link_type", "ref", "status"],
+"properties": {
+"link_id": {
+"type": "string",
+"minLength": 1
+},
+"link_type": {
+"type": "string",
+"enum": [
+"okf_to_bridge",
+"bridge_to_origin_trace",
+"bridge_to_evidence_trace",
+"bridge_to_attribution_trace",
+"bridge_to_usage_trace",
+"resource_to_evidence",
+"timestamp_to_lifecycle"
+]
+},
+"ref": {
+"type": "string",
+"minLength": 1
+},
+"status": {
+"type": "string",
+"enum": [
+"candidate",
+"review",
+"active",
+"rejected",
+"deprecated"
+]
+}
+}
+}
+}
+}
+},
+"policy_scope": {
+"type": "object",
+"additionalProperties": false,
+"required": ["applies_to", "governed_actions", "default_decision"],
+"properties": {
+"applies_to": {
+"type": "string",
+"enum": [
+"okf_document",
+"bridge_record",
+"trace_linked_asset",
+"knowledge_package"
+]
+},
+"governed_actions": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "string",
+"enum": [
+"read",
+"index",
+"embed",
+"retrieve",
+"reason",
+"generate",
+"train",
+"fine_tune",
+"redistribute"
+]
+}
+},
+"default_decision": {
+"type": "string",
+"enum": [
+"permit",
+"deny",
+"review_required"
+]
+}
+}
+},
+"access_rules": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"rule_id",
+"action",
+"decision",
+"condition",
+"evidence_required",
+"human_review_required"
+],
+"properties": {
+"rule_id": {
+"type": "string",
+"minLength": 1
+},
+"action": {
+"type": "string",
+"enum": [
+"read",
+"index",
+"embed",
+"retrieve",
+"reason",
+"generate",
+"train",
+"fine_tune",
+"redistribute"
+]
+},
+"decision": {
+"type": "string",
+"enum": [
+"permit",
+"deny",
+"review_required"
+]
+},
+"condition": {
+"type": "string",
+"minLength": 1
+},
+"evidence_required": {
+"type": "boolean"
+},
+"human_review_required": {
+"type": "boolean"
+},
+"notes": {
+"type": "string"
+}
+}
+}
+},
+"enforcement": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"enforcement_mode",
+"agent_must_check_policy",
+"log_usage_event",
+"deny_if_no_policy"
+],
+"properties": {
+"enforcement_mode": {
+"type": "string",
+"enum": [
+"advisory",
+"audit_only",
+"review_gate",
+"blocking"
+]
+},
+"agent_must_check_policy": {
+"type": "boolean"
+},
+"log_usage_event": {
+"type": "boolean"
+},
+"deny_if_no_policy": {
+"type": "boolean"
+},
+"usage_event_ref": {
+"type": "string"
+}
+}
+},
+"review": {
+"type": "object",
+"additionalProperties": false,
+"required": ["review_required", "review_status"],
+"properties": {
+"review_required": {
+"type": "boolean"
+},
+"review_status": {
+"type": "string",
+"enum": [
+"pending",
+"approved",
+"rejected",
+"not_required"
+]
+},
+"review_note": {
+"type": "string"
+}
+}
+}
+}
+}
+}
+}
