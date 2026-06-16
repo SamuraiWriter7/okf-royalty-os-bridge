@@ -68,23 +68,15 @@ TARGETS = [
         "schema": ROOT / "schemas" / "okf-frontmatter-mapping.schema.json",
         "example": ROOT / "examples" / "okf-frontmatter-mapping.example.yaml",
     },
-]
-
-TARGETS = [
-    {
-        "name": "OKF Royalty Bridge",
-        "schema": ROOT / "schemas" / "okf-royalty-bridge.schema.json",
-        "example": ROOT / "examples" / "okf-royalty-bridge.example.yaml",
-    },
-    {
-        "name": "OKF Frontmatter Mapping",
-        "schema": ROOT / "schemas" / "okf-frontmatter-mapping.schema.json",
-        "example": ROOT / "examples" / "okf-frontmatter-mapping.example.yaml",
-    },
     {
         "name": "Trace Layer Auto-Link",
         "schema": ROOT / "schemas" / "trace-layer-auto-link.schema.json",
         "example": ROOT / "examples" / "trace-layer-auto-link.example.yaml",
+    },
+    {
+        "name": "Compute Access Policy Integration",
+        "schema": ROOT / "schemas" / "compute-access-policy-integration.schema.json",
+        "example": ROOT / "examples" / "compute-access-policy-integration.example.yaml",
     },
 ]
 
