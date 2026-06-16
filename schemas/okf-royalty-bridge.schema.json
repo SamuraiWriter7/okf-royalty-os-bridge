@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SamuraiWriter7/okf-royalty-os-bridge/schemas/okf-royalty-bridge.schema.json",
+  "title": "OKF Royalty Bridge Record",
+  "description": "A bridge record connecting OKF knowledge documents with Royalty OS trace, evidence, attribution, and compute access rights.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["okf_royalty_bridge"],
+  "properties": {
+    "okf_royalty_bridge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "id",
+        "created_at",
+        "okf_document",
+        "origin",
+        "evidence",
+        "attribution",
+        "compute_access_right",
+        "allocation",
+        "lifecycle"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string",
+          "const": "0.1.0"
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "okf_document": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "okf_type", "title"],
+          "properties": {
+            "path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "okf_type": {
+              "type": "string",
+              "minLength": 1
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "resource": {
+              "type": "string"
+            },
+            "content_hash": {
+              "type": "string"
+            }
+          }
+        },
+        "origin": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["origin_id", "origin_type", "origin_name"],
+          "properties": {
+            "origin_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "origin_type": {
+              "type": "string",
+              "enum": ["human", "ai_agent", "organization", "dataset", "document", "mixed"]
+            },
+            "origin_name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "origin_uri": {
+              "type": "string"
+            }
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["evidence_type", "ref", "description"],
+            "properties": {
+              "evidence_type": {
+                "type": "string",
+                "enum": ["source_document", "okf_citation", "commit", "conversation", "dataset", "manual_review"]
+              },
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "confidence_score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        },
+        "attribution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["contributors"],
+          "properties": {
+            "contributors": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["id", "name", "role", "contribution_weight"],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": ["originator", "editor", "curator", "validator", "agent", "publisher"]
+                  },
+                  "contribution_weight": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "compute_access_right": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["required", "permitted_actions", "human_review_required"],
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "policy_ref": {
+              "type": "string"
+            },
+            "permitted_actions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": ["read", "index", "embed", "retrieve", "reason", "generate", "train", "fine_tune", "redistribute"]
+              }
+            },
+            "human_review_required": {
+              "type": "boolean"
+            }
+          }
+        },
+        "allocation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allocation_mode", "allocation_basis"],
+          "properties": {
+            "allocation_mode": {
+              "type": "string",
+              "enum": ["origin_attribution", "proportional_contribution", "manual_review", "public_domain", "no_allocation"]
+            },
+            "allocation_basis": {
+              "type": "string",
+              "minLength": 1
+            },
+            "allocation_rules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["beneficiary_id", "share"],
+                "properties": {
+                  "beneficiary_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "share": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "review_required"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["draft", "review", "active", "deprecated", "withdrawn"]
+            },
+            "review_required": {
+              "type": "boolean"
+            },
+            "review_note": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
