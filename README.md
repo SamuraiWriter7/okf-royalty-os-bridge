@@ -1,6 +1,6 @@
 # OKF Royalty OS Bridge
 
-A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, compute access rights, and trace-layer auto-linking.
+A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, compute access rights, trace-layer auto-linking, and compute access policy integration.
 
 ## Overview
 
@@ -16,8 +16,9 @@ OKF provides a lightweight knowledge exchange format based on Markdown files wit
 * lifecycle review state
 * OKF frontmatter compatibility mapping
 * trace-layer auto-linking
+* compute access policy integration
 
-The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, reviewable, and governance-ready.
+The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, reviewable, policy-aware, and governance-ready.
 
 ## Core Concept
 
@@ -33,12 +34,13 @@ OKF Royalty Bridge
   ├─ allocation basis
   ├─ lifecycle state
   ├─ OKF compatibility mapping
-  └─ trace-layer auto-link
+  ├─ trace-layer auto-link
+  └─ compute access policy integration
 ```
 
 OKF defines the portable knowledge container.
 
-Royalty OS defines the trace, evidence, attribution, and return logic around that knowledge.
+Royalty OS defines the trace, evidence, attribution, compute access, and value-return logic around that knowledge.
 
 This bridge connects the two without breaking OKF compatibility.
 
@@ -56,6 +58,7 @@ They also need:
 * allocation logic for value return
 * compatibility rules for interpreting OKF metadata
 * trace-layer links between knowledge documents, bridge records, and evidence records
+* explicit compute access policies for AI and agent workflows
 
 This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, governed, and eventually connected to value circulation.
 
@@ -66,7 +69,7 @@ This repository treats knowledge as an intelligence asset that can be shared, au
 The first candidate version defined the minimum bridge record:
 
 * `okf_document`: the OKF-compatible knowledge file being referenced
-* `origin`: the source or震源 of the knowledge
+* `origin`: the source or 震源 of the knowledge
 * `evidence`: supporting proof for attribution
 * `attribution`: contributors and contribution weights
 * `compute_access_right`: permitted AI/agent usage
@@ -92,9 +95,9 @@ The goal is to preserve OKF compatibility while enabling trace, evidence, attrib
 
 ### v0.3.0-candidate: Trace Layer Auto-Link
 
-The third candidate version defines how OKF-compatible knowledge documents and OKF Royalty Bridge records can be automatically connected to trace records.
+The third candidate version defined how OKF-compatible knowledge documents and OKF Royalty Bridge records can be automatically connected to trace records.
 
-It introduces a machine-readable auto-link model for connecting:
+It introduced a machine-readable auto-link model for connecting:
 
 * OKF documents to bridge records
 * bridge records to origin traces
@@ -108,9 +111,33 @@ This version does not make auto-generated links authoritative by default.
 
 Instead, it treats them as candidate trace links that may require review before activation.
 
-## Trace Layer Auto-Link
+### v0.4.0-candidate: Compute Access Policy Integration
 
-v0.3 introduces an explicit trace-linking layer:
+The fourth candidate version defines how traceable OKF knowledge packages can be connected to explicit AI/agent usage policies.
+
+It introduces a policy integration model for deciding whether specific compute actions should be:
+
+* permitted
+* denied
+* review-gated
+
+This version connects traceable knowledge to usage boundaries for actions such as:
+
+* `read`
+* `index`
+* `embed`
+* `retrieve`
+* `reason`
+* `generate`
+* `train`
+* `fine_tune`
+* `redistribute`
+
+v0.4 moves the repository from trace-aware governance toward policy-aware AI usage control.
+
+## Compute Access Policy Integration
+
+v0.4 introduces an explicit policy layer:
 
 ```text
 OKF document
@@ -121,29 +148,45 @@ OKF Royalty Bridge Record
   ↓
 Trace Layer Auto-Link
   ↓
-Origin / Evidence / Attribution / Usage Trace
+Compute Access Policy Integration
+  ↓
+Permitted / denied / review-gated AI usage
 ```
 
-The auto-link layer supports the following link types:
+Compute access policy is not the same as attribution.
 
-* `okf_to_bridge`
-* `bridge_to_origin_trace`
-* `bridge_to_evidence_trace`
-* `bridge_to_attribution_trace`
-* `bridge_to_usage_trace`
-* `resource_to_evidence`
-* `timestamp_to_lifecycle`
-
-The recommended lifecycle for generated links is:
+Attribution answers:
 
 ```text
-candidate
-  → review
-  → active
-  → deprecated / rejected
+Who contributed to this knowledge?
 ```
 
-This preserves the distinction between automatic trace discovery and confirmed governance records.
+Compute access policy answers:
+
+```text
+What may an AI system do with this knowledge?
+```
+
+The policy integration layer supports the following decisions:
+
+* `permit`
+* `deny`
+* `review_required`
+
+It also supports the following enforcement modes:
+
+* `advisory`
+* `audit_only`
+* `review_gate`
+* `blocking`
+
+The recommended default for governed knowledge packages is:
+
+```text
+deny_if_no_policy: true
+```
+
+This prevents AI/agent systems from assuming that readable knowledge is automatically usable for training, fine-tuning, redistribution, or commercial reuse.
 
 ## Repository Structure
 
@@ -151,16 +194,19 @@ This preserves the distinction between automatic trace discovery and confirmed g
 docs/
   okf-compatibility-mapping.md
   trace-layer-auto-link.md
+  compute-access-policy-integration.md
 
 schemas/
   okf-royalty-bridge.schema.json
   okf-frontmatter-mapping.schema.json
   trace-layer-auto-link.schema.json
+  compute-access-policy-integration.schema.json
 
 examples/
   okf-royalty-bridge.example.yaml
   okf-frontmatter-mapping.example.yaml
   trace-layer-auto-link.example.yaml
+  compute-access-policy-integration.example.yaml
 
 scripts/
   validate_examples.py
@@ -178,6 +224,7 @@ The current schemas are:
 schemas/okf-royalty-bridge.schema.json
 schemas/okf-frontmatter-mapping.schema.json
 schemas/trace-layer-auto-link.schema.json
+schemas/compute-access-policy-integration.schema.json
 ```
 
 ### OKF Royalty Bridge Schema
@@ -198,6 +245,12 @@ It defines how OKF frontmatter fields can be mapped into bridge targets without 
 
 It defines how OKF documents, bridge records, and trace records can be connected through reviewable auto-generated candidate links.
 
+### Compute Access Policy Integration Schema
+
+`compute-access-policy-integration.schema.json` validates the structure of a `compute_access_policy_integration` record.
+
+It defines how OKF documents, bridge records, and trace links can be connected to compute access policies for AI and agent usage.
+
 ## Examples
 
 The reference examples are:
@@ -206,6 +259,7 @@ The reference examples are:
 examples/okf-royalty-bridge.example.yaml
 examples/okf-frontmatter-mapping.example.yaml
 examples/trace-layer-auto-link.example.yaml
+examples/compute-access-policy-integration.example.yaml
 ```
 
 These examples demonstrate:
@@ -213,6 +267,7 @@ These examples demonstrate:
 * how an OKF-compatible knowledge document can be connected to Royalty OS governance
 * how OKF frontmatter fields can be interpreted by the bridge layer
 * how candidate trace links can connect OKF documents, bridge records, and trace records
+* how compute access policies can permit, deny, or review-gate AI usage
 * how compatibility can be preserved without adding custom OKF fields
 
 ## Documentation
@@ -222,6 +277,7 @@ The current documentation files are:
 ```text
 docs/okf-compatibility-mapping.md
 docs/trace-layer-auto-link.md
+docs/compute-access-policy-integration.md
 ```
 
 ## Validation
@@ -253,6 +309,10 @@ Expected result:
   schema : schemas/trace-layer-auto-link.schema.json
   example: examples/trace-layer-auto-link.example.yaml
 [ok] Trace Layer Auto-Link example is valid
+[validate] Compute Access Policy Integration
+  schema : schemas/compute-access-policy-integration.schema.json
+  example: examples/compute-access-policy-integration.example.yaml
+[ok] Compute Access Policy Integration example is valid
 ```
 
 ## GitHub Actions
@@ -314,17 +374,35 @@ Trace Layer Auto-Link should generate candidate links, not final authority.
 
 Human review may be required before links become active governance connections.
 
+### 9. Treat compute access as policy-bound
+
+Traceable knowledge should not automatically imply unrestricted AI usage.
+
+Compute access should be governed by explicit policy rules.
+
+### 10. Deny sensitive usage when no policy exists
+
+For governed knowledge packages, missing policy should not be treated as permission.
+
+The recommended default is:
+
+```text
+deny_if_no_policy: true
+```
+
 ## Status
 
-**v0.3.0-candidate**
+**v0.4.0-candidate**
 
-This version adds Trace Layer Auto-Link.
+This version adds Compute Access Policy Integration.
 
 v0.1 established the first working bridge record between OKF-compatible knowledge documents and Royalty OS governance.
 
 v0.2 added the compatibility layer that explains how OKF frontmatter fields can be interpreted by the bridge without modifying OKF.
 
-v0.3 adds reviewable auto-linking between OKF documents, bridge records, and trace records.
+v0.3 added reviewable auto-linking between OKF documents, bridge records, and trace records.
+
+v0.4 adds explicit compute access policy integration for AI and agent usage boundaries.
 
 ## Roadmap
 
