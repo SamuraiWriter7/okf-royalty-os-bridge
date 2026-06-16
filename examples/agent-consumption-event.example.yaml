@@ -26,18 +26,18 @@ agent_consumption_event:
       ref: "examples/compute-access-policy-integration.example.yaml"
       schema_version: "0.4.0"
 
-  trace_links:
-    - link_id: "link-2026-06-16-001"
-      link_type: "okf_to_bridge"
-      status: "active"
+    trace_links:
+      - link_id: "link-2026-06-16-001"
+        link_type: "okf_to_bridge"
+        status: "active"
 
-    - link_id: "link-2026-06-16-002"
-      link_type: "resource_to_evidence"
-      status: "candidate"
+      - link_id: "link-2026-06-16-002"
+        link_type: "resource_to_evidence"
+        status: "candidate"
 
-    - link_id: "link-2026-06-16-003"
-      link_type: "bridge_to_origin_trace"
-      status: "review"
+      - link_id: "link-2026-06-16-003"
+        link_type: "bridge_to_origin_trace"
+        status: "review"
 
   policy_context:
     policy_id: "compute-access-policy-2026-06-16-001"
