@@ -16,7 +16,6 @@ okf_type: "Concept"
 title: "Royalty OS Intelligence Layer"
 content_hash: "sha256:example-placeholder"
 
-```
 bridge_record:
   bridge_id: "okf-royalty-bridge-2026-06-16-001"
   ref: "examples/okf-royalty-bridge.example.yaml"
@@ -39,7 +38,6 @@ trace_links:
   - link_id: "link-2026-06-16-003"
     link_type: "bridge_to_origin_trace"
     status: "review"
-```
 
 policy_context:
 policy_id: "compute-access-policy-2026-06-16-001"
@@ -52,13 +50,11 @@ rule_id: "rule-permit-read"
 human_review_required: false
 evidence_required: false
 
-```
   - action: "generate"
     decision: "review_required"
     rule_id: "rule-review-generate"
     human_review_required: true
     evidence_required: true
-```
 
 consumption:
 event_type: "generate"
