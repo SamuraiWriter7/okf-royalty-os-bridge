@@ -6,7 +6,7 @@ A bridge specification connecting OKF knowledge packages with Royalty OS trace, 
 
 **OKF Royalty OS Bridge** defines a minimal governance bridge between OKF-compatible knowledge documents and Royalty OS governance structures.
 
-OKF provides a lightweight knowledge exchange format based on Markdown files with YAML frontmatter. This repository does not replace or modify OKF. Instead, it defines an external bridge record that connects OKF knowledge packages to:
+OKF provides a lightweight knowledge exchange format based on Markdown files with YAML frontmatter. This repository does not replace or modify OKF. Instead, it defines external bridge records that connect OKF knowledge packages to:
 
 * origin traceability
 * evidence records
@@ -14,6 +14,7 @@ OKF provides a lightweight knowledge exchange format based on Markdown files wit
 * compute access rights
 * allocation basis
 * lifecycle review state
+* OKF frontmatter compatibility mapping
 
 The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, and governance-ready.
 
@@ -29,7 +30,8 @@ OKF Royalty Bridge
   ├─ attribution model
   ├─ compute access right
   ├─ allocation basis
-  └─ lifecycle state
+  ├─ lifecycle state
+  └─ OKF compatibility mapping
 ```
 
 OKF defines the portable knowledge container.
@@ -50,12 +52,15 @@ They also need:
 * permission boundaries for AI usage
 * review status before reuse
 * allocation logic for value return
+* compatibility rules for interpreting OKF metadata
 
-This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, and governed.
+This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, governed, and eventually connected to value circulation.
 
-## v0.1.0-candidate Scope
+## Version Scope
 
-The first candidate version defines the minimum bridge record:
+### v0.1.0-candidate: Bridge Record
+
+The first candidate version defined the minimum bridge record:
 
 * `okf_document`: the OKF-compatible knowledge file being referenced
 * `origin`: the source or震源 of the knowledge
@@ -65,14 +70,64 @@ The first candidate version defines the minimum bridge record:
 * `allocation`: basis for value return
 * `lifecycle`: review and publication state
 
+### v0.2.0-candidate: OKF Compatibility Mapping
+
+The second candidate version defines how OKF frontmatter fields can be interpreted by the bridge layer.
+
+It adds a compatibility mapping between OKF metadata and Royalty OS bridge targets.
+
+This version clarifies how the following OKF fields can be read by the bridge:
+
+* `type`
+* `title`
+* `description`
+* `resource`
+* `tags`
+* `timestamp`
+
+The goal is to preserve OKF compatibility while enabling trace, evidence, attribution, compute access rights, allocation, and lifecycle governance.
+
+## OKF Compatibility Mapping
+
+v0.2 introduces an explicit mapping layer:
+
+```text
+OKF frontmatter
+  ├─ type
+  ├─ title
+  ├─ description
+  ├─ resource
+  ├─ tags
+  └─ timestamp
+        ↓
+OKF Frontmatter Mapping
+        ↓
+OKF Royalty Bridge Record
+        ↓
+Trace / Evidence / Attribution / Compute Access Right / Allocation
+```
+
+The mapping follows these principles:
+
+* Do not modify OKF.
+* Do not require custom OKF fields.
+* Treat OKF metadata as governance signals, not complete rights records.
+* Keep Royalty OS governance data in an external bridge record.
+* Preserve both human readability and agent readability.
+
 ## Repository Structure
 
 ```text
+docs/
+  okf-compatibility-mapping.md
+
 schemas/
   okf-royalty-bridge.schema.json
+  okf-frontmatter-mapping.schema.json
 
 examples/
   okf-royalty-bridge.example.yaml
+  okf-frontmatter-mapping.example.yaml
 
 scripts/
   validate_examples.py
@@ -82,25 +137,51 @@ scripts/
     validate-examples.yml
 ```
 
-## Schema
+## Schemas
 
-The main schema is:
+The current schemas are:
 
 ```text
 schemas/okf-royalty-bridge.schema.json
+schemas/okf-frontmatter-mapping.schema.json
 ```
 
-It validates the structure of an `okf_royalty_bridge` record.
+### OKF Royalty Bridge Schema
 
-## Example
+`okf-royalty-bridge.schema.json` validates the structure of an `okf_royalty_bridge` record.
 
-The reference example is:
+It defines how an OKF-compatible knowledge document can be connected to origin, evidence, attribution, compute access rights, allocation, and lifecycle governance.
+
+### OKF Frontmatter Mapping Schema
+
+`okf-frontmatter-mapping.schema.json` validates the structure of an `okf_frontmatter_mapping` record.
+
+It defines how OKF frontmatter fields can be mapped into bridge targets without modifying OKF itself.
+
+## Examples
+
+The reference examples are:
 
 ```text
 examples/okf-royalty-bridge.example.yaml
+examples/okf-frontmatter-mapping.example.yaml
 ```
 
-This example demonstrates how an OKF-compatible knowledge document can be connected to Royalty OS trace, evidence, attribution, compute access rights, allocation rules, and lifecycle review.
+These examples demonstrate:
+
+* how an OKF-compatible knowledge document can be connected to Royalty OS governance
+* how OKF frontmatter fields can be interpreted by the bridge layer
+* how compatibility can be preserved without adding custom OKF fields
+
+## Documentation
+
+The v0.2 compatibility document is:
+
+```text
+docs/okf-compatibility-mapping.md
+```
+
+It explains the mapping between OKF frontmatter and Royalty OS bridge targets.
 
 ## Validation
 
@@ -123,6 +204,10 @@ Expected result:
   schema : schemas/okf-royalty-bridge.schema.json
   example: examples/okf-royalty-bridge.example.yaml
 [ok] OKF Royalty Bridge example is valid
+[validate] OKF Frontmatter Mapping
+  schema : schemas/okf-frontmatter-mapping.schema.json
+  example: examples/okf-frontmatter-mapping.example.yaml
+[ok] OKF Frontmatter Mapping example is valid
 ```
 
 ## GitHub Actions
@@ -142,7 +227,7 @@ The workflow runs on:
 It checks:
 
 * Python syntax
-* YAML example validation against the JSON Schema
+* YAML example validation against JSON Schema
 
 ## Design Principles
 
@@ -170,13 +255,35 @@ Knowledge content and compute access rights should be related, but not collapsed
 
 AI-readable governance should still preserve human review boundaries.
 
+### 6. Treat OKF metadata as signals
+
+OKF frontmatter fields can support governance interpretation, but they do not replace evidence, attribution, review, or allocation logic.
+
+### 7. Preserve compatibility before extension
+
+The bridge should first clarify compatibility before adding deeper automation, policy engines, or trace-layer integration.
+
 ## Status
 
-**v0.1.0-candidate**
+**v0.2.0-candidate**
 
-Initial bridge layer between OKF-compatible knowledge documents and Royalty OS governance.
+This version adds OKF Compatibility Mapping.
 
-This version establishes the first working structure for connecting portable AI knowledge files with trace, evidence, attribution, compute access rights, and allocation logic.
+v0.1 established the first working bridge record between OKF-compatible knowledge documents and Royalty OS governance.
+
+v0.2 adds the compatibility layer that explains how OKF frontmatter fields can be interpreted by the bridge without modifying OKF.
+
+## Roadmap
+
+Planned next directions:
+
+```text
+v0.1 = Bridge Record
+v0.2 = OKF Compatibility Mapping
+v0.3 = Trace Layer Auto-Link
+v0.4 = Compute Access Policy Integration
+v0.5 = Agent Consumption Event
+```
 
 ## License
 
