@@ -1,6 +1,6 @@
 # OKF Royalty OS Bridge
 
-A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, compute access rights, trace-layer auto-linking, and compute access policy integration.
+A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, compute access rights, trace-layer auto-linking, compute access policy integration, and agent consumption event logging.
 
 ## Overview
 
@@ -17,8 +17,9 @@ OKF provides a lightweight knowledge exchange format based on Markdown files wit
 * OKF frontmatter compatibility mapping
 * trace-layer auto-linking
 * compute access policy integration
+* agent consumption event logging
 
-The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, reviewable, policy-aware, and governance-ready.
+The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, reviewable, policy-aware, usage-aware, and governance-ready.
 
 ## Core Concept
 
@@ -35,12 +36,13 @@ OKF Royalty Bridge
   ├─ lifecycle state
   ├─ OKF compatibility mapping
   ├─ trace-layer auto-link
-  └─ compute access policy integration
+  ├─ compute access policy integration
+  └─ agent consumption event
 ```
 
 OKF defines the portable knowledge container.
 
-Royalty OS defines the trace, evidence, attribution, compute access, and value-return logic around that knowledge.
+Royalty OS defines the trace, evidence, attribution, compute access, usage logging, and value-return logic around that knowledge.
 
 This bridge connects the two without breaking OKF compatibility.
 
@@ -59,8 +61,9 @@ They also need:
 * compatibility rules for interpreting OKF metadata
 * trace-layer links between knowledge documents, bridge records, and evidence records
 * explicit compute access policies for AI and agent workflows
+* usage events showing what agents actually did with governed knowledge
 
-This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, governed, and eventually connected to value circulation.
+This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, governed, consumed by agents, and eventually connected to value circulation.
 
 ## Version Scope
 
@@ -113,15 +116,15 @@ Instead, it treats them as candidate trace links that may require review before 
 
 ### v0.4.0-candidate: Compute Access Policy Integration
 
-The fourth candidate version defines how traceable OKF knowledge packages can be connected to explicit AI/agent usage policies.
+The fourth candidate version defined how traceable OKF knowledge packages can be connected to explicit AI/agent usage policies.
 
-It introduces a policy integration model for deciding whether specific compute actions should be:
+It introduced a policy integration model for deciding whether specific compute actions should be:
 
 * permitted
 * denied
 * review-gated
 
-This version connects traceable knowledge to usage boundaries for actions such as:
+This version connected traceable knowledge to usage boundaries for actions such as:
 
 * `read`
 * `index`
@@ -133,11 +136,30 @@ This version connects traceable knowledge to usage boundaries for actions such a
 * `fine_tune`
 * `redistribute`
 
-v0.4 moves the repository from trace-aware governance toward policy-aware AI usage control.
+v0.4 moved the repository from trace-aware governance toward policy-aware AI usage control.
 
-## Compute Access Policy Integration
+### v0.5.0-candidate: Agent Consumption Event
 
-v0.4 introduces an explicit policy layer:
+The fifth candidate version defines how AI agents consume OKF-linked knowledge packages under Royalty OS governance.
+
+It introduces a usage event model for recording:
+
+* which agent consumed the knowledge
+* which OKF document or bridge record was used
+* which compute access policy was checked
+* what action was performed
+* whether the action was permitted, denied, blocked, or review-gated
+* which trace links were involved
+* whether usage logging is required
+* whether attribution is required
+* whether allocation may be triggered
+* whether human review is required
+
+v0.5 moves the repository from policy-aware governance toward usage-aware trace and allocation readiness.
+
+## Agent Consumption Event
+
+v0.5 introduces an explicit consumption event layer:
 
 ```text
 OKF document
@@ -150,15 +172,9 @@ Trace Layer Auto-Link
   ↓
 Compute Access Policy Integration
   ↓
-Permitted / denied / review-gated AI usage
-```
-
-Compute access policy is not the same as attribution.
-
-Attribution answers:
-
-```text
-Who contributed to this knowledge?
+Agent Consumption Event
+  ↓
+Usage Trace / Review / Allocation Trigger
 ```
 
 Compute access policy answers:
@@ -167,26 +183,37 @@ Compute access policy answers:
 What may an AI system do with this knowledge?
 ```
 
-The policy integration layer supports the following decisions:
-
-* `permit`
-* `deny`
-* `review_required`
-
-It also supports the following enforcement modes:
-
-* `advisory`
-* `audit_only`
-* `review_gate`
-* `blocking`
-
-The recommended default for governed knowledge packages is:
+Agent Consumption Event answers:
 
 ```text
-deny_if_no_policy: true
+What did an AI system actually do with this knowledge?
 ```
 
-This prevents AI/agent systems from assuming that readable knowledge is automatically usable for training, fine-tuning, redistribution, or commercial reuse.
+The Agent Consumption Event layer supports the following actions:
+
+* `read`
+* `index`
+* `embed`
+* `retrieve`
+* `reason`
+* `generate`
+* `train`
+* `fine_tune`
+* `redistribute`
+
+An event may move through the following lifecycle:
+
+```text
+observed
+  → logged
+  → reviewed
+  → approved / rejected
+  → allocation_triggered / closed
+```
+
+The event itself does not calculate payment.
+
+It records the usage evidence that may later trigger allocation, royalty, review, or governance events.
 
 ## Repository Structure
 
@@ -195,18 +222,21 @@ docs/
   okf-compatibility-mapping.md
   trace-layer-auto-link.md
   compute-access-policy-integration.md
+  agent-consumption-event.md
 
 schemas/
   okf-royalty-bridge.schema.json
   okf-frontmatter-mapping.schema.json
   trace-layer-auto-link.schema.json
   compute-access-policy-integration.schema.json
+  agent-consumption-event.schema.json
 
 examples/
   okf-royalty-bridge.example.yaml
   okf-frontmatter-mapping.example.yaml
   trace-layer-auto-link.example.yaml
   compute-access-policy-integration.example.yaml
+  agent-consumption-event.example.yaml
 
 scripts/
   validate_examples.py
@@ -225,6 +255,7 @@ schemas/okf-royalty-bridge.schema.json
 schemas/okf-frontmatter-mapping.schema.json
 schemas/trace-layer-auto-link.schema.json
 schemas/compute-access-policy-integration.schema.json
+schemas/agent-consumption-event.schema.json
 ```
 
 ### OKF Royalty Bridge Schema
@@ -251,6 +282,12 @@ It defines how OKF documents, bridge records, and trace records can be connected
 
 It defines how OKF documents, bridge records, and trace links can be connected to compute access policies for AI and agent usage.
 
+### Agent Consumption Event Schema
+
+`agent-consumption-event.schema.json` validates the structure of an `agent_consumption_event` record.
+
+It defines how an AI agent consumes an OKF-linked knowledge package under policy, trace, review, logging, and attribution constraints.
+
 ## Examples
 
 The reference examples are:
@@ -260,6 +297,7 @@ examples/okf-royalty-bridge.example.yaml
 examples/okf-frontmatter-mapping.example.yaml
 examples/trace-layer-auto-link.example.yaml
 examples/compute-access-policy-integration.example.yaml
+examples/agent-consumption-event.example.yaml
 ```
 
 These examples demonstrate:
@@ -268,6 +306,7 @@ These examples demonstrate:
 * how OKF frontmatter fields can be interpreted by the bridge layer
 * how candidate trace links can connect OKF documents, bridge records, and trace records
 * how compute access policies can permit, deny, or review-gate AI usage
+* how agent usage events can record actual knowledge consumption
 * how compatibility can be preserved without adding custom OKF fields
 
 ## Documentation
@@ -278,6 +317,7 @@ The current documentation files are:
 docs/okf-compatibility-mapping.md
 docs/trace-layer-auto-link.md
 docs/compute-access-policy-integration.md
+docs/agent-consumption-event.md
 ```
 
 ## Validation
@@ -313,6 +353,10 @@ Expected result:
   schema : schemas/compute-access-policy-integration.schema.json
   example: examples/compute-access-policy-integration.example.yaml
 [ok] Compute Access Policy Integration example is valid
+[validate] Agent Consumption Event
+  schema : schemas/agent-consumption-event.schema.json
+  example: examples/agent-consumption-event.example.yaml
+[ok] Agent Consumption Event example is valid
 ```
 
 ## GitHub Actions
@@ -390,11 +434,17 @@ The recommended default is:
 deny_if_no_policy: true
 ```
 
+### 11. Treat agent usage as evidence
+
+Agent consumption events should record what agents actually did with governed knowledge.
+
+Usage events may later support trace review, attribution, allocation, or governance actions.
+
 ## Status
 
-**v0.4.0-candidate**
+**v0.5.0-candidate**
 
-This version adds Compute Access Policy Integration.
+This version adds Agent Consumption Event.
 
 v0.1 established the first working bridge record between OKF-compatible knowledge documents and Royalty OS governance.
 
@@ -402,7 +452,9 @@ v0.2 added the compatibility layer that explains how OKF frontmatter fields can 
 
 v0.3 added reviewable auto-linking between OKF documents, bridge records, and trace records.
 
-v0.4 adds explicit compute access policy integration for AI and agent usage boundaries.
+v0.4 added explicit compute access policy integration for AI and agent usage boundaries.
+
+v0.5 adds agent consumption event logging for actual AI/agent usage of governed knowledge packages.
 
 ## Roadmap
 
@@ -414,6 +466,7 @@ v0.2 = OKF Compatibility Mapping
 v0.3 = Trace Layer Auto-Link
 v0.4 = Compute Access Policy Integration
 v0.5 = Agent Consumption Event
+v0.6 = Allocation Trigger Event
 ```
 
 ## License
