@@ -1,0 +1,274 @@
+{
+"$schema": "https://json-schema.org/draft/2020-12/schema",
+"$id": "https://github.com/SamuraiWriter7/okf-royalty-os-bridge/schemas/trace-layer-auto-link.schema.json",
+"title": "Trace Layer Auto-Link",
+"description": "A record describing automatically generated candidate links between OKF documents, bridge records, and trace records.",
+"type": "object",
+"additionalProperties": false,
+"required": ["trace_layer_auto_link"],
+"properties": {
+"trace_layer_auto_link": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"schema_version",
+"id",
+"created_at",
+"okf_document",
+"bridge_record",
+"trace_sources",
+"auto_link_rules",
+"generated_links",
+"review"
+],
+"properties": {
+"schema_version": {
+"type": "string",
+"const": "0.3.0"
+},
+"id": {
+"type": "string",
+"minLength": 1
+},
+"created_at": {
+"type": "string",
+"format": "date-time"
+},
+"okf_document": {
+"type": "object",
+"additionalProperties": false,
+"required": ["path", "okf_type", "title"],
+"properties": {
+"path": {
+"type": "string",
+"minLength": 1
+},
+"okf_type": {
+"type": "string",
+"minLength": 1
+},
+"title": {
+"type": "string",
+"minLength": 1
+},
+"resource": {
+"type": "string"
+},
+"content_hash": {
+"type": "string"
+}
+}
+},
+"bridge_record": {
+"type": "object",
+"additionalProperties": false,
+"required": ["bridge_id", "ref", "schema_version"],
+"properties": {
+"bridge_id": {
+"type": "string",
+"minLength": 1
+},
+"ref": {
+"type": "string",
+"minLength": 1
+},
+"schema_version": {
+"type": "string",
+"minLength": 1
+}
+}
+},
+"trace_sources": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": ["trace_id", "trace_type", "ref", "link_role"],
+"properties": {
+"trace_id": {
+"type": "string",
+"minLength": 1
+},
+"trace_type": {
+"type": "string",
+"enum": [
+"origin_trace",
+"evidence_trace",
+"attribution_trace",
+"usage_trace",
+"commit_trace",
+"review_trace"
+]
+},
+"ref": {
+"type": "string",
+"minLength": 1
+},
+"link_role": {
+"type": "string",
+"enum": [
+"origin",
+"evidence",
+"attribution",
+"usage",
+"lifecycle",
+"review"
+]
+},
+"confidence_score": {
+"type": "number",
+"minimum": 0,
+"maximum": 1
+}
+}
+}
+},
+"auto_link_rules": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"rule_id",
+"source_signal",
+"target_trace_type",
+"link_type",
+"condition",
+"human_review_required"
+],
+"properties": {
+"rule_id": {
+"type": "string",
+"minLength": 1
+},
+"source_signal": {
+"type": "string",
+"enum": [
+"okf.path",
+"okf.resource",
+"okf.timestamp",
+"okf.tags",
+"bridge.origin",
+"bridge.evidence",
+"bridge.attribution",
+"git.commit",
+"manual.review"
+]
+},
+"target_trace_type": {
+"type": "string",
+"enum": [
+"origin_trace",
+"evidence_trace",
+"attribution_trace",
+"usage_trace",
+"commit_trace",
+"review_trace"
+]
+},
+"link_type": {
+"type": "string",
+"enum": [
+"okf_to_bridge",
+"bridge_to_origin_trace",
+"bridge_to_evidence_trace",
+"bridge_to_attribution_trace",
+"bridge_to_usage_trace",
+"resource_to_evidence",
+"timestamp_to_lifecycle"
+]
+},
+"condition": {
+"type": "string",
+"minLength": 1
+},
+"human_review_required": {
+"type": "boolean"
+}
+}
+}
+},
+"generated_links": {
+"type": "array",
+"minItems": 1,
+"items": {
+"type": "object",
+"additionalProperties": false,
+"required": [
+"link_id",
+"from",
+"to",
+"link_type",
+"status"
+],
+"properties": {
+"link_id": {
+"type": "string",
+"minLength": 1
+},
+"from": {
+"type": "string",
+"minLength": 1
+},
+"to": {
+"type": "string",
+"minLength": 1
+},
+"link_type": {
+"type": "string",
+"enum": [
+"okf_to_bridge",
+"bridge_to_origin_trace",
+"bridge_to_evidence_trace",
+"bridge_to_attribution_trace",
+"bridge_to_usage_trace",
+"resource_to_evidence",
+"timestamp_to_lifecycle"
+]
+},
+"status": {
+"type": "string",
+"enum": [
+"candidate",
+"review",
+"active",
+"rejected",
+"deprecated"
+]
+},
+"confidence_score": {
+"type": "number",
+"minimum": 0,
+"maximum": 1
+}
+}
+}
+},
+"review": {
+"type": "object",
+"additionalProperties": false,
+"required": ["review_required", "review_status"],
+"properties": {
+"review_required": {
+"type": "boolean"
+},
+"review_status": {
+"type": "string",
+"enum": [
+"pending",
+"approved",
+"rejected",
+"not_required"
+]
+},
+"review_note": {
+"type": "string"
+}
+}
+}
+}
+}
+}
+}
