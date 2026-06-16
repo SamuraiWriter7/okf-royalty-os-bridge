@@ -1,0 +1,90 @@
+trace_layer_auto_link:
+schema_version: "0.3.0"
+id: "trace-layer-auto-link-2026-06-16-001"
+created_at: "2026-06-16T10:00:00+09:00"
+
+okf_document:
+path: "concepts/royalty-os-intelligence-layer.md"
+okf_type: "Concept"
+title: "Royalty OS Intelligence Layer"
+resource: "https://github.com/SamuraiWriter7/okf-royalty-os-bridge"
+content_hash: "sha256:example-placeholder"
+
+bridge_record:
+bridge_id: "okf-royalty-bridge-2026-06-16-001"
+ref: "examples/okf-royalty-bridge.example.yaml"
+schema_version: "0.1.0"
+
+trace_sources:
+- trace_id: "origin-trace-2026-06-16-001"
+trace_type: "origin_trace"
+ref: "docs/royalty-os-intelligence-layer.md"
+link_role: "origin"
+confidence_score: 0.95
+
+```
+- trace_id: "evidence-trace-2026-06-16-001"
+  trace_type: "evidence_trace"
+  ref: "concepts/royalty-os-intelligence-layer.md#citations"
+  link_role: "evidence"
+  confidence_score: 0.9
+
+- trace_id: "review-trace-2026-06-16-001"
+  trace_type: "review_trace"
+  ref: "reviews/trace-layer-auto-link-review.md"
+  link_role: "review"
+  confidence_score: 0.85
+```
+
+auto_link_rules:
+- rule_id: "rule-okf-resource-to-evidence"
+source_signal: "okf.resource"
+target_trace_type: "evidence_trace"
+link_type: "resource_to_evidence"
+condition: "If okf.resource is present, create a candidate evidence trace link."
+human_review_required: true
+
+```
+- rule_id: "rule-bridge-origin-to-origin-trace"
+  source_signal: "bridge.origin"
+  target_trace_type: "origin_trace"
+  link_type: "bridge_to_origin_trace"
+  condition: "If bridge.origin is present, create a candidate origin trace link."
+  human_review_required: true
+
+- rule_id: "rule-okf-timestamp-to-lifecycle"
+  source_signal: "okf.timestamp"
+  target_trace_type: "review_trace"
+  link_type: "timestamp_to_lifecycle"
+  condition: "If okf.timestamp is present, attach temporal context to lifecycle review."
+  human_review_required: false
+```
+
+generated_links:
+- link_id: "link-2026-06-16-001"
+from: "concepts/royalty-os-intelligence-layer.md"
+to: "examples/okf-royalty-bridge.example.yaml"
+link_type: "okf_to_bridge"
+status: "active"
+confidence_score: 1.0
+
+```
+- link_id: "link-2026-06-16-002"
+  from: "okf.resource"
+  to: "evidence-trace-2026-06-16-001"
+  link_type: "resource_to_evidence"
+  status: "candidate"
+  confidence_score: 0.9
+
+- link_id: "link-2026-06-16-003"
+  from: "bridge.origin"
+  to: "origin-trace-2026-06-16-001"
+  link_type: "bridge_to_origin_trace"
+  status: "review"
+  confidence_score: 0.95
+```
+
+review:
+review_required: true
+review_status: "pending"
+review_note: "Auto-generated trace links should be reviewed before becoming authoritative governance connections."
