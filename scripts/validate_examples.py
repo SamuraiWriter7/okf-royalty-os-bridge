@@ -57,6 +57,18 @@ def main() -> int:
 
     return 0 if all_ok else 1
 
+TARGETS = [
+    {
+        "name": "OKF Royalty Bridge",
+        "schema": ROOT / "schemas" / "okf-royalty-bridge.schema.json",
+        "example": ROOT / "examples" / "okf-royalty-bridge.example.yaml",
+    },
+    {
+        "name": "OKF Frontmatter Mapping",
+        "schema": ROOT / "schemas" / "okf-frontmatter-mapping.schema.json",
+        "example": ROOT / "examples" / "okf-frontmatter-mapping.example.yaml",
+    },
+]
 
 if __name__ == "__main__":
     sys.exit(main())
