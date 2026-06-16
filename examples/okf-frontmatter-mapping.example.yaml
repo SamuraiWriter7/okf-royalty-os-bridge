@@ -1,43 +1,96 @@
-- source_field: "title"
-  target_fields:
-    - "okf_document.title"
-  mapping_role: "Provides the human-readable title of the referenced knowledge package."
-  is_required_for_okf: false
-  is_required_for_bridge: true
-  notes: "The title supports review, indexing, and human inspection."
+okf_frontmatter_mapping:
+  schema_version: "0.2.0"
+  id: "okf-frontmatter-mapping-2026-06-16-001"
+  created_at: "2026-06-16T09:30:00+09:00"
 
-- source_field: "description"
-  target_fields:
-    - "okf_document.description"
-  mapping_role: "Provides a summary of the knowledge package."
-  is_required_for_okf: false
-  is_required_for_bridge: false
-  notes: "The description helps agents and reviewers understand the scope of the knowledge package."
+  okf_fields:
+    type: "Concept"
+    title: "Royalty OS Intelligence Layer"
+    description: "A knowledge concept describing trace, evidence, attribution, and compute access rights for AI knowledge reuse."
+    resource: "https://github.com/SamuraiWriter7/okf-royalty-os-bridge"
+    tags:
+      - okf
+      - royalty-os
+      - traceability
+      - attribution
+      - compute-access-rights
+    timestamp: "2026-06-16T09:30:00+09:00"
 
-- source_field: "resource"
-  target_fields:
-    - "okf_document.resource"
-    - "evidence.ref"
-    - "origin.origin_uri"
-  mapping_role: "Connects the OKF document to an external source, reference, or authoritative location."
-  is_required_for_okf: false
-  is_required_for_bridge: false
-  notes: "Resource is treated as an evidence candidate, not as complete proof of origin."
+  bridge_targets:
+    okf_document:
+      - "okf_document.okf_type"
+      - "okf_document.title"
+      - "okf_document.description"
+      - "okf_document.resource"
+      - "okf_document.tags"
+      - "okf_document.timestamp"
+    origin:
+      - "origin.origin_uri"
+    evidence:
+      - "evidence.ref"
+      - "evidence.description"
+    allocation:
+      - "allocation.policy_tags"
+      - "allocation.allocation_basis"
+    lifecycle:
+      - "lifecycle.review_note"
 
-- source_field: "tags"
-  target_fields:
-    - "okf_document.tags"
-    - "allocation.policy_tags"
-  mapping_role: "Provides topic and policy classification hints."
-  is_required_for_okf: false
-  is_required_for_bridge: false
-  notes: "Tags may support routing and policy classification, but do not determine ownership or allocation by themselves."
+  mapping_rules:
+    - source_field: "type"
+      target_fields:
+        - "okf_document.okf_type"
+      mapping_role: "Identifies the OKF concept type."
+      is_required_for_okf: true
+      is_required_for_bridge: true
+      notes: "The bridge records the OKF type but does not redefine OKF type semantics."
 
-- source_field: "timestamp"
-  target_fields:
-    - "okf_document.timestamp"
-    - "lifecycle.review_note"
-  mapping_role: "Provides temporal context for creation, update, or review."
-  is_required_for_okf: false
-  is_required_for_bridge: false
-  notes: "Timestamp should not be treated as a complete lifecycle record without review."
+    - source_field: "title"
+      target_fields:
+        - "okf_document.title"
+      mapping_role: "Provides the human-readable title of the referenced knowledge package."
+      is_required_for_okf: false
+      is_required_for_bridge: true
+      notes: "The title supports review, indexing, and human inspection."
+
+    - source_field: "description"
+      target_fields:
+        - "okf_document.description"
+      mapping_role: "Provides a summary of the knowledge package."
+      is_required_for_okf: false
+      is_required_for_bridge: false
+      notes: "The description helps agents and reviewers understand the scope of the knowledge package."
+
+    - source_field: "resource"
+      target_fields:
+        - "okf_document.resource"
+        - "evidence.ref"
+        - "origin.origin_uri"
+      mapping_role: "Connects the OKF document to an external source, reference, or authoritative location."
+      is_required_for_okf: false
+      is_required_for_bridge: false
+      notes: "Resource is treated as an evidence candidate, not as complete proof of origin."
+
+    - source_field: "tags"
+      target_fields:
+        - "okf_document.tags"
+        - "allocation.policy_tags"
+      mapping_role: "Provides topic and policy classification hints."
+      is_required_for_okf: false
+      is_required_for_bridge: false
+      notes: "Tags may support routing and policy classification, but do not determine ownership or allocation by themselves."
+
+    - source_field: "timestamp"
+      target_fields:
+        - "okf_document.timestamp"
+        - "lifecycle.review_note"
+      mapping_role: "Provides temporal context for creation, update, or review."
+      is_required_for_okf: false
+      is_required_for_bridge: false
+      notes: "Timestamp should not be treated as a complete lifecycle record without review."
+
+  compatibility:
+    modifies_okf: false
+    requires_custom_okf_fields: false
+    external_bridge_record: true
+    human_readable: true
+    agent_readable: true
