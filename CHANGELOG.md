@@ -4,6 +4,98 @@ All notable changes to this project will be documented in this file.
 
 This repository follows a candidate-based development style. Early versions may evolve quickly as schemas, examples, validation scripts, and governance documents are refined.
 
+## [v0.3.0-candidate] - 2026-06-16
+
+### Added
+
+* Added v0.3 trace automation layer: **Trace Layer Auto-Link**.
+* Added documentation:
+
+  * `docs/trace-layer-auto-link.md`
+* Added schema:
+
+  * `schemas/trace-layer-auto-link.schema.json`
+* Added example:
+
+  * `examples/trace-layer-auto-link.example.yaml`
+
+### Defined
+
+* Defined `trace_layer_auto_link` as the v0.3 trace-linking record.
+* Defined how OKF-compatible knowledge documents and bridge records can be connected to trace records.
+* Defined reviewable auto-generated candidate links between:
+
+  * OKF documents
+  * OKF Royalty Bridge records
+  * origin traces
+  * evidence traces
+  * attribution traces
+  * usage traces
+  * review traces
+
+### Trace Link Types
+
+* Added support for the following link types:
+
+  * `okf_to_bridge`
+  * `bridge_to_origin_trace`
+  * `bridge_to_evidence_trace`
+  * `bridge_to_attribution_trace`
+  * `bridge_to_usage_trace`
+  * `resource_to_evidence`
+  * `timestamp_to_lifecycle`
+
+### Auto-Link Sources
+
+* Added support for auto-link source signals:
+
+  * `okf.path`
+  * `okf.resource`
+  * `okf.timestamp`
+  * `okf.tags`
+  * `bridge.origin`
+  * `bridge.evidence`
+  * `bridge.attribution`
+  * `git.commit`
+  * `manual.review`
+
+### Review Model
+
+* Introduced a review boundary for generated trace links.
+* Defined generated link statuses:
+
+  * `candidate`
+  * `review`
+  * `active`
+  * `rejected`
+  * `deprecated`
+* Clarified that auto-generated links should not become authoritative by default.
+* Clarified that human review may be required before candidate trace links become active governance connections.
+
+### Validation
+
+* Updated `scripts/validate_examples.py` to validate:
+
+  * `OKF Royalty Bridge`
+  * `OKF Frontmatter Mapping`
+  * `Trace Layer Auto-Link`
+* Confirmed GitHub Actions validation passes with the new v0.3 example.
+
+### Status
+
+* v0.3 Trace Layer Auto-Link is active.
+* The repository now supports:
+
+  * v0.1 Bridge Record
+  * v0.2 OKF Compatibility Mapping
+  * v0.3 Trace Layer Auto-Link
+
+### Next Expected Direction
+
+* v0.4: Compute Access Policy Integration
+
+---
+
 ## [v0.2.0-candidate] - 2026-06-16
 
 ### Added
