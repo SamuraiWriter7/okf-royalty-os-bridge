@@ -78,6 +78,11 @@ TARGETS = [
         "schema": ROOT / "schemas" / "compute-access-policy-integration.schema.json",
         "example": ROOT / "examples" / "compute-access-policy-integration.example.yaml",
     },
+    {
+        "name": "Agent Consumption Event",
+        "schema": ROOT / "schemas" / "agent-consumption-event.schema.json",
+        "example": ROOT / "examples" / "agent-consumption-event.example.yaml",
+    },
 ]
 
 if __name__ == "__main__":
