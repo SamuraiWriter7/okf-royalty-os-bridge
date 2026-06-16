@@ -1,0 +1,63 @@
+okf_royalty_bridge:
+  schema_version: "0.1.0"
+  id: "okf-royalty-bridge-2026-06-16-001"
+  created_at: "2026-06-16T09:00:00+09:00"
+
+  okf_document:
+    path: "concepts/royalty-os-intelligence-layer.md"
+    okf_type: "Concept"
+    title: "Royalty OS Intelligence Layer"
+    resource: "https://github.com/SamuraiWriter7/okf-royalty-os-bridge"
+    content_hash: "sha256:example-placeholder"
+
+  origin:
+    origin_id: "human:shidenkai-alpha"
+    origin_type: "human"
+    origin_name: "Shidenkai Alpha"
+    origin_uri: "https://github.com/SamuraiWriter7"
+
+  evidence:
+    - evidence_type: "source_document"
+      ref: "docs/royalty-os-intelligence-layer.md"
+      description: "Original conceptual source describing trace, evidence, attribution, and compute access rights."
+      confidence_score: 0.95
+    - evidence_type: "okf_citation"
+      ref: "concepts/royalty-os-intelligence-layer.md#citations"
+      description: "Citation section inside the OKF-compatible knowledge document."
+      confidence_score: 0.9
+
+  attribution:
+    contributors:
+      - id: "human:shidenkai-alpha"
+        name: "Shidenkai Alpha"
+        role: "originator"
+        contribution_weight: 0.8
+      - id: "agent:assistant"
+        name: "AI Assistant"
+        role: "curator"
+        contribution_weight: 0.2
+
+  compute_access_right:
+    required: true
+    policy_ref: "schemas/compute-access-right.schema.json"
+    permitted_actions:
+      - read
+      - index
+      - retrieve
+      - reason
+      - generate
+    human_review_required: true
+
+  allocation:
+    allocation_mode: "origin_attribution"
+    allocation_basis: "Value is allocated according to traceable origin, evidence strength, and contribution weight."
+    allocation_rules:
+      - beneficiary_id: "human:shidenkai-alpha"
+        share: 0.8
+      - beneficiary_id: "agent:assistant"
+        share: 0.2
+
+  lifecycle:
+    status: "draft"
+    review_required: true
+    review_note: "Initial v0.1 bridge record for connecting OKF knowledge files with Royalty OS governance."
