@@ -1,6 +1,6 @@
 # OKF Royalty OS Bridge
 
-A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, and compute access rights.
+A bridge specification connecting OKF knowledge packages with Royalty OS trace, evidence, attribution, compute access rights, and trace-layer auto-linking.
 
 ## Overview
 
@@ -15,8 +15,9 @@ OKF provides a lightweight knowledge exchange format based on Markdown files wit
 * allocation basis
 * lifecycle review state
 * OKF frontmatter compatibility mapping
+* trace-layer auto-linking
 
-The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, and governance-ready.
+The purpose of this repository is to make knowledge files not only portable, but also traceable, attributable, reviewable, and governance-ready.
 
 ## Core Concept
 
@@ -31,7 +32,8 @@ OKF Royalty Bridge
   ├─ compute access right
   ├─ allocation basis
   ├─ lifecycle state
-  └─ OKF compatibility mapping
+  ├─ OKF compatibility mapping
+  └─ trace-layer auto-link
 ```
 
 OKF defines the portable knowledge container.
@@ -53,6 +55,7 @@ They also need:
 * review status before reuse
 * allocation logic for value return
 * compatibility rules for interpreting OKF metadata
+* trace-layer links between knowledge documents, bridge records, and evidence records
 
 This repository treats knowledge as an intelligence asset that can be shared, audited, reviewed, governed, and eventually connected to value circulation.
 
@@ -72,11 +75,11 @@ The first candidate version defined the minimum bridge record:
 
 ### v0.2.0-candidate: OKF Compatibility Mapping
 
-The second candidate version defines how OKF frontmatter fields can be interpreted by the bridge layer.
+The second candidate version defined how OKF frontmatter fields can be interpreted by the bridge layer.
 
-It adds a compatibility mapping between OKF metadata and Royalty OS bridge targets.
+It added a compatibility mapping between OKF metadata and Royalty OS bridge targets.
 
-This version clarifies how the following OKF fields can be read by the bridge:
+This version clarified how the following OKF fields can be read by the bridge:
 
 * `type`
 * `title`
@@ -87,47 +90,77 @@ This version clarifies how the following OKF fields can be read by the bridge:
 
 The goal is to preserve OKF compatibility while enabling trace, evidence, attribution, compute access rights, allocation, and lifecycle governance.
 
-## OKF Compatibility Mapping
+### v0.3.0-candidate: Trace Layer Auto-Link
 
-v0.2 introduces an explicit mapping layer:
+The third candidate version defines how OKF-compatible knowledge documents and OKF Royalty Bridge records can be automatically connected to trace records.
+
+It introduces a machine-readable auto-link model for connecting:
+
+* OKF documents to bridge records
+* bridge records to origin traces
+* bridge records to evidence traces
+* bridge records to attribution traces
+* bridge records to usage traces
+* OKF resources to evidence records
+* OKF timestamps to lifecycle review context
+
+This version does not make auto-generated links authoritative by default.
+
+Instead, it treats them as candidate trace links that may require review before activation.
+
+## Trace Layer Auto-Link
+
+v0.3 introduces an explicit trace-linking layer:
 
 ```text
-OKF frontmatter
-  ├─ type
-  ├─ title
-  ├─ description
-  ├─ resource
-  ├─ tags
-  └─ timestamp
-        ↓
-OKF Frontmatter Mapping
-        ↓
+OKF document
+  ↓
+OKF Compatibility Mapping
+  ↓
 OKF Royalty Bridge Record
-        ↓
-Trace / Evidence / Attribution / Compute Access Right / Allocation
+  ↓
+Trace Layer Auto-Link
+  ↓
+Origin / Evidence / Attribution / Usage Trace
 ```
 
-The mapping follows these principles:
+The auto-link layer supports the following link types:
 
-* Do not modify OKF.
-* Do not require custom OKF fields.
-* Treat OKF metadata as governance signals, not complete rights records.
-* Keep Royalty OS governance data in an external bridge record.
-* Preserve both human readability and agent readability.
+* `okf_to_bridge`
+* `bridge_to_origin_trace`
+* `bridge_to_evidence_trace`
+* `bridge_to_attribution_trace`
+* `bridge_to_usage_trace`
+* `resource_to_evidence`
+* `timestamp_to_lifecycle`
+
+The recommended lifecycle for generated links is:
+
+```text
+candidate
+  → review
+  → active
+  → deprecated / rejected
+```
+
+This preserves the distinction between automatic trace discovery and confirmed governance records.
 
 ## Repository Structure
 
 ```text
 docs/
   okf-compatibility-mapping.md
+  trace-layer-auto-link.md
 
 schemas/
   okf-royalty-bridge.schema.json
   okf-frontmatter-mapping.schema.json
+  trace-layer-auto-link.schema.json
 
 examples/
   okf-royalty-bridge.example.yaml
   okf-frontmatter-mapping.example.yaml
+  trace-layer-auto-link.example.yaml
 
 scripts/
   validate_examples.py
@@ -144,6 +177,7 @@ The current schemas are:
 ```text
 schemas/okf-royalty-bridge.schema.json
 schemas/okf-frontmatter-mapping.schema.json
+schemas/trace-layer-auto-link.schema.json
 ```
 
 ### OKF Royalty Bridge Schema
@@ -158,6 +192,12 @@ It defines how an OKF-compatible knowledge document can be connected to origin, 
 
 It defines how OKF frontmatter fields can be mapped into bridge targets without modifying OKF itself.
 
+### Trace Layer Auto-Link Schema
+
+`trace-layer-auto-link.schema.json` validates the structure of a `trace_layer_auto_link` record.
+
+It defines how OKF documents, bridge records, and trace records can be connected through reviewable auto-generated candidate links.
+
 ## Examples
 
 The reference examples are:
@@ -165,23 +205,24 @@ The reference examples are:
 ```text
 examples/okf-royalty-bridge.example.yaml
 examples/okf-frontmatter-mapping.example.yaml
+examples/trace-layer-auto-link.example.yaml
 ```
 
 These examples demonstrate:
 
 * how an OKF-compatible knowledge document can be connected to Royalty OS governance
 * how OKF frontmatter fields can be interpreted by the bridge layer
+* how candidate trace links can connect OKF documents, bridge records, and trace records
 * how compatibility can be preserved without adding custom OKF fields
 
 ## Documentation
 
-The v0.2 compatibility document is:
+The current documentation files are:
 
 ```text
 docs/okf-compatibility-mapping.md
+docs/trace-layer-auto-link.md
 ```
-
-It explains the mapping between OKF frontmatter and Royalty OS bridge targets.
 
 ## Validation
 
@@ -208,6 +249,10 @@ Expected result:
   schema : schemas/okf-frontmatter-mapping.schema.json
   example: examples/okf-frontmatter-mapping.example.yaml
 [ok] OKF Frontmatter Mapping example is valid
+[validate] Trace Layer Auto-Link
+  schema : schemas/trace-layer-auto-link.schema.json
+  example: examples/trace-layer-auto-link.example.yaml
+[ok] Trace Layer Auto-Link example is valid
 ```
 
 ## GitHub Actions
@@ -263,15 +308,23 @@ OKF frontmatter fields can support governance interpretation, but they do not re
 
 The bridge should first clarify compatibility before adding deeper automation, policy engines, or trace-layer integration.
 
+### 8. Treat auto-links as candidates
+
+Trace Layer Auto-Link should generate candidate links, not final authority.
+
+Human review may be required before links become active governance connections.
+
 ## Status
 
-**v0.2.0-candidate**
+**v0.3.0-candidate**
 
-This version adds OKF Compatibility Mapping.
+This version adds Trace Layer Auto-Link.
 
 v0.1 established the first working bridge record between OKF-compatible knowledge documents and Royalty OS governance.
 
-v0.2 adds the compatibility layer that explains how OKF frontmatter fields can be interpreted by the bridge without modifying OKF.
+v0.2 added the compatibility layer that explains how OKF frontmatter fields can be interpreted by the bridge without modifying OKF.
+
+v0.3 adds reviewable auto-linking between OKF documents, bridge records, and trace records.
 
 ## Roadmap
 
