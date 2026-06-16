@@ -1,94 +1,96 @@
 agent_consumption_event:
-schema_version: "0.5.0"
-id: "agent-consumption-event-2026-06-16-001"
-created_at: "2026-06-16T11:00:00+09:00"
+  schema_version: "0.5.0"
+  id: "agent-consumption-event-2026-06-16-001"
+  created_at: "2026-06-16T11:00:00+09:00"
 
-agent:
-agent_id: "agent:okf-reader-001"
-agent_type: "llm_agent"
-agent_name: "OKF Reader Agent"
-operator: "human:shidenkai-alpha"
+  agent:
+    agent_id: "agent:okf-reader-001"
+    agent_type: "llm_agent"
+    agent_name: "OKF Reader Agent"
+    operator: "human:shidenkai-alpha"
 
-consumed_asset:
-okf_document:
-path: "concepts/royalty-os-intelligence-layer.md"
-okf_type: "Concept"
-title: "Royalty OS Intelligence Layer"
-content_hash: "sha256:example-placeholder"
+  consumed_asset:
+    okf_document:
+      path: "concepts/royalty-os-intelligence-layer.md"
+      okf_type: "Concept"
+      title: "Royalty OS Intelligence Layer"
+      content_hash: "sha256:example-placeholder"
 
-bridge_record:
-  bridge_id: "okf-royalty-bridge-2026-06-16-001"
-  ref: "examples/okf-royalty-bridge.example.yaml"
-  schema_version: "0.1.0"
+    bridge_record:
+      bridge_id: "okf-royalty-bridge-2026-06-16-001"
+      ref: "examples/okf-royalty-bridge.example.yaml"
+      schema_version: "0.1.0"
 
-policy_integration:
-  policy_integration_id: "compute-access-policy-integration-2026-06-16-001"
-  ref: "examples/compute-access-policy-integration.example.yaml"
-  schema_version: "0.4.0"
+    policy_integration:
+      policy_integration_id: "compute-access-policy-integration-2026-06-16-001"
+      ref: "examples/compute-access-policy-integration.example.yaml"
+      schema_version: "0.4.0"
 
-trace_links:
-  - link_id: "link-2026-06-16-001"
-    link_type: "okf_to_bridge"
-    status: "active"
+  trace_links:
+    - link_id: "link-2026-06-16-001"
+      link_type: "okf_to_bridge"
+      status: "active"
 
-  - link_id: "link-2026-06-16-002"
-    link_type: "resource_to_evidence"
-    status: "candidate"
+    - link_id: "link-2026-06-16-002"
+      link_type: "resource_to_evidence"
+      status: "candidate"
 
-  - link_id: "link-2026-06-16-003"
-    link_type: "bridge_to_origin_trace"
-    status: "review"
+    - link_id: "link-2026-06-16-003"
+      link_type: "bridge_to_origin_trace"
+      status: "review"
 
-policy_context:
-policy_id: "compute-access-policy-2026-06-16-001"
-enforcement_mode: "review_gate"
-deny_if_no_policy: true
-decision_snapshot:
-- action: "read"
-decision: "permit"
-rule_id: "rule-permit-read"
-human_review_required: false
-evidence_required: false
+  policy_context:
+    policy_id: "compute-access-policy-2026-06-16-001"
+    enforcement_mode: "review_gate"
+    deny_if_no_policy: true
 
-  - action: "generate"
-    decision: "review_required"
-    rule_id: "rule-review-generate"
-    human_review_required: true
-    evidence_required: true
+    decision_snapshot:
+      - action: "read"
+        decision: "permit"
+        rule_id: "rule-permit-read"
+        human_review_required: false
+        evidence_required: false
 
-consumption:
-event_type: "generate"
-purpose: "Generate a trace-aware summary using the OKF-linked knowledge package."
-performed_at: "2026-06-16T11:00:00+09:00"
-input_refs:
-- "concepts/royalty-os-intelligence-layer.md"
-- "examples/okf-royalty-bridge.example.yaml"
-- "examples/compute-access-policy-integration.example.yaml"
-permitted: false
-blocked: false
-block_reason: "Generation is review-gated and pending approval."
+      - action: "generate"
+        decision: "review_required"
+        rule_id: "rule-review-generate"
+        human_review_required: true
+        evidence_required: true
 
-trace_context:
-source_trace_ids:
-- "origin-trace-2026-06-16-001"
-- "evidence-trace-2026-06-16-001"
-- "review-trace-2026-06-16-001"
-generated_usage_trace_id: "usage-trace-2026-06-16-001"
-attribution_required: true
-allocation_triggered: false
+  consumption:
+    event_type: "generate"
+    purpose: "Generate a trace-aware summary using the OKF-linked knowledge package."
+    performed_at: "2026-06-16T11:00:00+09:00"
+    input_refs:
+      - "concepts/royalty-os-intelligence-layer.md"
+      - "examples/okf-royalty-bridge.example.yaml"
+      - "examples/compute-access-policy-integration.example.yaml"
+    permitted: false
+    blocked: false
+    block_reason: "Generation is review-gated and pending approval."
 
-output_context:
-output_generated: true
-output_ref: "outputs/trace-aware-summary.example.md"
-output_hash: "sha256:output-placeholder"
-attribution_note_required: true
+  trace_context:
+    source_trace_ids:
+      - "origin-trace-2026-06-16-001"
+      - "evidence-trace-2026-06-16-001"
+      - "review-trace-2026-06-16-001"
+    generated_usage_trace_id: "usage-trace-2026-06-16-001"
+    attribution_required: true
+    allocation_triggered: false
 
-usage_logging:
-log_required: true
-log_status: "pending"
-usage_event_ref: "usage-events/agent-consumption-event-2026-06-16-001.yaml"
+  output_context:
+    output_generated: true
+    output_ref: "outputs/trace-aware-summary.example.md"
+    output_hash: "sha256:output-placeholder"
+    attribution_note_required: true
 
-review:
-review_required: true
-review_status: "pending"
-review_note: "Generation is review-gated. Allocation should not be triggered until review is approved."
+  usage_logging:
+    log_required: true
+    log_status: "pending"
+    usage_event_ref: "usage-events/agent-consumption-event-2026-06-16-001.yaml"
+
+  review:
+    review_required: true
+    review_status: "pending"
+    review_note: "Generation is review-gated. Allocation should not be triggered until review is approved."
+
