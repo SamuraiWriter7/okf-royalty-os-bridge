@@ -1,105 +1,105 @@
 compute_access_policy_integration:
-  schema_version: "0.4.0"
-  id: "compute-access-policy-integration-2026-06-16-001"
-  created_at: "2026-06-16T10:30:00+09:00"
+schema_version: "0.4.0"
+id: "compute-access-policy-integration-2026-06-16-001"
+created_at: "2026-06-16T10:30:00+09:00"
 
-  policy_ref:
-    policy_id: "compute-access-policy-2026-06-16-001"
-    policy_name: "Royalty OS Knowledge Reuse Policy"
-    policy_version: "0.4.0"
-    policy_uri: "policies/royalty-os-knowledge-reuse-policy.yaml"
+policy_ref:
+policy_id: "compute-access-policy-2026-06-16-001"
+policy_name: "Royalty OS Knowledge Reuse Policy"
+policy_version: "0.4.0"
+policy_uri: "policies/royalty-os-knowledge-reuse-policy.yaml"
 
-  linked_assets:
-    okf_document:
-      path: "concepts/royalty-os-intelligence-layer.md"
-      okf_type: "Concept"
-      title: "Royalty OS Intelligence Layer"
-      content_hash: "sha256:example-placeholder"
+linked_assets:
+okf_document:
+path: "concepts/royalty-os-intelligence-layer.md"
+okf_type: "Concept"
+title: "Royalty OS Intelligence Layer"
+content_hash: "sha256:example-placeholder"
 
-    bridge_record:
-      bridge_id: "okf-royalty-bridge-2026-06-16-001"
-      ref: "examples/okf-royalty-bridge.example.yaml"
-      schema_version: "0.1.0"
+bridge_record:
+  bridge_id: "okf-royalty-bridge-2026-06-16-001"
+  ref: "examples/okf-royalty-bridge.example.yaml"
+  schema_version: "0.1.0"
 
-  trace_links:
-    - link_id: "link-2026-06-16-001"
-      link_type: "okf_to_bridge"
-      ref: "examples/trace-layer-auto-link.example.yaml"
-      status: "active"
+trace_links:
+  - link_id: "link-2026-06-16-001"
+    link_type: "okf_to_bridge"
+    ref: "examples/trace-layer-auto-link.example.yaml"
+    status: "active"
 
-    - link_id: "link-2026-06-16-002"
-      link_type: "resource_to_evidence"
-      ref: "examples/trace-layer-auto-link.example.yaml"
-      status: "candidate"
+  - link_id: "link-2026-06-16-002"
+    link_type: "resource_to_evidence"
+    ref: "examples/trace-layer-auto-link.example.yaml"
+    status: "candidate"
 
-    - link_id: "link-2026-06-16-003"
-      link_type: "bridge_to_origin_trace"
-      ref: "examples/trace-layer-auto-link.example.yaml"
-      status: "review"
+  - link_id: "link-2026-06-16-003"
+    link_type: "bridge_to_origin_trace"
+    ref: "examples/trace-layer-auto-link.example.yaml"
+    status: "review"
 
-  policy_scope:
-    applies_to: "knowledge_package"
-    governed_actions:
-      - read
-      - index
-      - embed
-      - retrieve
-      - reason
-      - generate
-      - train
-      - fine_tune
-      - redistribute
-    default_decision: "review_required"
+policy_scope:
+applies_to: "knowledge_package"
+governed_actions:
+- read
+- index
+- embed
+- retrieve
+- reason
+- generate
+- train
+- fine_tune
+- redistribute
+default_decision: "review_required"
 
-  access_rules:
-    - rule_id: "rule-permit-read"
-      action: "read"
-      decision: "permit"
-      condition: "Reading is permitted for inspection, review, and compatibility mapping."
-      evidence_required: false
-      human_review_required: false
-      notes: "Read access does not imply permission for training or redistribution."
+access_rules:
+- rule_id: "rule-permit-read"
+action: "read"
+decision: "permit"
+condition: "Reading is permitted for inspection, review, and compatibility mapping."
+evidence_required: false
+human_review_required: false
+notes: "Read access does not imply permission for training or redistribution."
 
-    - rule_id: "rule-permit-retrieve"
-      action: "retrieve"
-      decision: "permit"
-      condition: "Retrieval is permitted when linked evidence and bridge records are available."
-      evidence_required: true
-      human_review_required: false
-      notes: "Retrieval should preserve trace references."
+- rule_id: "rule-permit-retrieve"
+  action: "retrieve"
+  decision: "permit"
+  condition: "Retrieval is permitted when linked evidence and bridge records are available."
+  evidence_required: true
+  human_review_required: false
+  notes: "Retrieval should preserve trace references."
 
-    - rule_id: "rule-review-generate"
-      action: "generate"
-      decision: "review_required"
-      condition: "Generation using this knowledge package requires trace-aware attribution and usage logging."
-      evidence_required: true
-      human_review_required: true
-      notes: "Generated outputs should retain attribution context where applicable."
+- rule_id: "rule-review-generate"
+  action: "generate"
+  decision: "review_required"
+  condition: "Generation using this knowledge package requires trace-aware attribution and usage logging."
+  evidence_required: true
+  human_review_required: true
+  notes: "Generated outputs should retain attribution context where applicable."
 
-    - rule_id: "rule-deny-train"
-      action: "train"
-      decision: "deny"
-      condition: "Training is denied unless a future explicit policy grants permission."
-      evidence_required: true
-      human_review_required: true
-      notes: "Training requires a stronger rights and allocation model."
+- rule_id: "rule-deny-train"
+  action: "train"
+  decision: "deny"
+  condition: "Training is denied unless a future explicit policy grants permission."
+  evidence_required: true
+  human_review_required: true
+  notes: "Training requires a stronger rights and allocation model."
 
-    - rule_id: "rule-deny-redistribute"
-      action: "redistribute"
-      decision: "deny"
-      condition: "Redistribution is denied unless explicitly approved by a governance review."
-      evidence_required: true
-      human_review_required: true
-      notes: "Redistribution may trigger separate attribution and allocation requirements."
+- rule_id: "rule-deny-redistribute"
+  action: "redistribute"
+  decision: "deny"
+  condition: "Redistribution is denied unless explicitly approved by a governance review."
+  evidence_required: true
+  human_review_required: true
+  notes: "Redistribution may trigger separate attribution and allocation requirements."
 
-  enforcement:
-    enforcement_mode: "review_gate"
-    agent_must_check_policy: true
-    log_usage_event: true
-    deny_if_no_policy: true
-    usage_event_ref: "usage-events/compute-access-usage-event.example.yaml"
+enforcement:
+enforcement_mode: "review_gate"
+agent_must_check_policy: true
+log_usage_event: true
+deny_if_no_policy: true
+usage_event_ref: "usage-events/compute-access-usage-event.example.yaml"
 
-  review:
-    review_required: true
-    review_status: "pending"
-    review_note: "Initial v0.4 policy integration. Review is required before generation, training, fine-tuning, or redistribution usage."
+review:
+review_required: true
+review_status: "pending"
+review_note: "Initial v0.4 policy integration. Review is required before generation, training, fine-tuning, or redistribution usage."
